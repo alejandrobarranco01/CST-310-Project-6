@@ -1,31 +1,37 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GL/glut.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
-#include "Camera.h"
 
 #include <iostream>
+#include <limits>
+#include <GL/freeglut_std.h>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
 void do_movement();
+void moveLighting(GLFWwindow *window);
+int getUserInput();
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+int shininess = 256;
+
 // Camera
-glm::vec3 cameraPos = glm::vec3(1.25f, 1.4f, 3.25f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); // rotation
+glm::vec3 cameraPos = glm::vec3(-1.12255f, -0.00404159f, 2.48081f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 2.0f, 0.0f); // rotation
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 // For camera rotation
-GLfloat yaw = -102.5f; // Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right
-GLfloat pitch = -2.5f; // Pitch is initialized to 5.0 degrees downward
+GLfloat yaw = -64.5f; // Yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right
+GLfloat pitch = 3.5f; // Pitch is initialized to 5.0 degrees downward
 
 // buffer for keyboard input
 bool keys[1024];
@@ -35,7 +41,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(0.5f, 0.0f, 2.0f);
 
 int main()
 {
@@ -56,7 +62,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Project 6", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -166,6 +172,7 @@ int main()
         lastFrame = currentFrame;
 
         do_movement();
+        moveLighting(window);
 
         // render
         // ------
@@ -178,6 +185,22 @@ int main()
         lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("lightPos", lightPos);
         lightingShader.setVec3("viewPos", cameraPos);
+        GLint shininessLocation = lightingShader.getUniformLocation("shininess");
+        if (shininessLocation == -1)
+        {
+            std::cerr << "Failed to locate the shininess uniform in the shader program!" << std::endl;
+            // Handle the error appropriately
+        }
+        // Set the default value of shininess
+        glUniform1i(shininessLocation, shininess);
+
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        {
+            int userInput = getUserInput();
+            std::cout << "User input: " << userInput << std::endl;
+            // Change the value of shininess based on user input
+            shininess = userInput;
+        }
 
         // view/projection transformations
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
@@ -255,11 +278,12 @@ void do_movement()
     // Press 1 to reset the camera
     if (keys[GLFW_KEY_1])
     {
-        cameraPos = glm::vec3(1.25f, 1.4f, 3.25f);
+        cameraPos = glm::vec3(-1.12255f, -0.00404159f, 2.48081f);
         cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); // rotation
         cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-        yaw = -102.5f; // reset yaw to reset camera rotation
-        pitch = -2.5f; // Pitch is initialized to 0.0 degrees
+        yaw = -64.5f; // reset yaw to reset camera rotation
+        pitch = 3.5f; // Pitch is initialized to 0.0 degrees
+        lightPos = glm::vec3(0.5f, 0.0f, 2.0f);
     }
 
     if (keys[GLFW_KEY_W])
@@ -301,4 +325,41 @@ void do_movement()
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     cameraFront = glm::normalize(front);
+}
+
+void moveLighting(GLFWwindow *window)
+{
+    float lightSpeed = 0.5f; // Adjust as needed
+
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+        lightPos.y += lightSpeed * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+        lightPos.y -= lightSpeed * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+        lightPos.x -= lightSpeed * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        lightPos.x += lightSpeed * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+        lightPos.z -= lightSpeed * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        lightPos.z += lightSpeed * deltaTime;
+}
+
+int getUserInput()
+{
+    int userInput;
+    std::cout << "Please enter one of the following integer values (2, 4, 8, 16, 32, 64, 128, or 256): ";
+    std::cin >> userInput;
+
+    // Check if the input is within the desired range and is a valid value
+    while (std::cin.fail() || (userInput != 2 && userInput != 4 && userInput != 8 && userInput != 16 &&
+                               userInput != 32 && userInput != 64 && userInput != 128 && userInput != 256))
+    {
+        std::cout << "Invalid input. Please enter a valid integer value (2, 4, 8, 16, 32, 64, 128, or 256): ";
+        std::cin.clear();                                                   // Clear error flags
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard input buffer
+        std::cin >> userInput;
+    }
+
+    return userInput;
 }

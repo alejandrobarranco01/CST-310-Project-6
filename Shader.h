@@ -76,6 +76,11 @@ public:
     {
         glUseProgram(ID);
     }
+    // Method to retrieve the location of a uniform variable in the shader program
+    GLint getUniformLocation(const std::string &name) const
+    {
+        return glGetUniformLocation(ID, name.c_str());
+    }
     // utility uniform functions
     // ------------------------------------------------------------------------
     void setBool(const std::string &name, bool value) const
