@@ -4,8 +4,9 @@
 
 - Alejandro Barranco-Leyte
 - Jason Broom
+---
 
-- ## Introduction
+## Introduction
 
 Project 6 focuses on exploring specular lighting, objects, illumination, and shaders using C++/OpenGL. The goal is to develop a program that visually demonstrates the impact of different shininess values on cubes rendered in a 3D environment.
 
