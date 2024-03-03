@@ -17,27 +17,27 @@ public:
     // Constructor: Generates a shader program from vertex and fragment paths
     Shader(const char *vertexPath, const char *fragmentPath)
     {
-        // 1. retrieve the vertex/fragment source code from filePath
+        // Retrieve the vertex/fragment source code from filePath
         std::string vertexCode;
         std::string fragmentCode;
         std::ifstream vShaderFile;
         std::ifstream fShaderFile;
-        // ensure ifstream objects can throw exceptions:
+        // Ensure ifstream objects can throw exceptions:
         vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         try
         {
-            // open files
+            // Open files
             vShaderFile.open(vertexPath);
             fShaderFile.open(fragmentPath);
             std::stringstream vShaderStream, fShaderStream;
-            // read file's buffer contents into streams
+            // Read file's buffer contents into streams
             vShaderStream << vShaderFile.rdbuf();
             fShaderStream << fShaderFile.rdbuf();
-            // close file handlers
+            // Close file handlers
             vShaderFile.close();
             fShaderFile.close();
-            // convert stream into string
+            // Convert stream into string
             vertexCode = vShaderStream.str();
             fragmentCode = fShaderStream.str();
         }
@@ -47,56 +47,54 @@ public:
         }
         const char *vShaderCode = vertexCode.c_str();
         const char *fShaderCode = fragmentCode.c_str();
-        // 2. compile shaders
+        // Compile shaders
         unsigned int vertex, fragment;
-        // vertex shader
+        // Vertex shader
         vertex = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertex, 1, &vShaderCode, NULL);
         glCompileShader(vertex);
         checkCompileErrors(vertex, "VERTEX");
-        // fragment Shader
+        // Fragment Shader
         fragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragment, 1, &fShaderCode, NULL);
         glCompileShader(fragment);
         checkCompileErrors(fragment, "FRAGMENT");
-        // shader Program
+        // Shader Program
         ID = glCreateProgram();
         glAttachShader(ID, vertex);
         glAttachShader(ID, fragment);
         glLinkProgram(ID);
         checkCompileErrors(ID, "PROGRAM");
-        // delete the shaders as they're linked into our program now and no longer necessary
+        // Delete the shaders as they're linked into our program now and no longer necessary
         glDeleteShader(vertex);
         glDeleteShader(fragment);
     }
-    // activate the shader
-    // ------------------------------------------------------------------------
+    // Activates the shader program
     void use() const
     {
         glUseProgram(ID);
     }
-    // Method to retrieve the location of a uniform variable in the shader program
+    // Retrieves the location of a uniform variable in the shader program
     GLint getUniformLocation(const std::string &name) const
     {
         return glGetUniformLocation(ID, name.c_str());
     }
-    // utility uniform functions
-    // ------------------------------------------------------------------------
+    // Sets a boolean uniform in the shader program
     void setBool(const std::string &name, bool value) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
     }
-    // ------------------------------------------------------------------------
+    // Sets an integer uniform in the shader program
     void setInt(const std::string &name, int value) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
     }
-    // ------------------------------------------------------------------------
+    // Sets a float uniform in the shader program
     void setFloat(const std::string &name, float value) const
     {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
-    // ------------------------------------------------------------------------
+    // Sets a 2D vector uniform in the shader program
     void setVec2(const std::string &name, const glm::vec2 &value) const
     {
         glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
@@ -105,7 +103,7 @@ public:
     {
         glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
     }
-    // ------------------------------------------------------------------------
+    // Sets a 3D vector uniform in the shader program
     void setVec3(const std::string &name, const glm::vec3 &value) const
     {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
@@ -114,7 +112,7 @@ public:
     {
         glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
     }
-    // ------------------------------------------------------------------------
+    // Sets a 4D vector uniform in the shader program
     void setVec4(const std::string &name, const glm::vec4 &value) const
     {
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
@@ -123,25 +121,24 @@ public:
     {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
     }
-    // ------------------------------------------------------------------------
+    // Sets a 2x2 matrix uniform in the shader program
     void setMat2(const std::string &name, const glm::mat2 &mat) const
     {
         glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    // ------------------------------------------------------------------------
+    // Sets a 3x3 matrix uniform in the shader program
     void setMat3(const std::string &name, const glm::mat3 &mat) const
     {
         glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
-    // ------------------------------------------------------------------------
+    // Sets a 4x4 matrix uniform in the shader program
     void setMat4(const std::string &name, const glm::mat4 &mat) const
     {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
 private:
-    // utility function for checking shader compilation/linking errors.
-    // ------------------------------------------------------------------------
+    // Utility function for checking shader compilation/linking errors
     void checkCompileErrors(GLuint shader, std::string type)
     {
         GLint success;
