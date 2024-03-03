@@ -27,11 +27,11 @@ int shininess = 256; // Initial shininess value
 
 // Camera settings
 glm::vec3 cameraPos = glm::vec3(-1.12255f, -0.00404159f, 2.48081f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 2.0f, 0.0f); 
+glm::vec3 cameraFront = glm::vec3(0.0f, 2.0f, 0.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 // Camera rotation parameters
-GLfloat yaw = -64.5f; 
+GLfloat yaw = -64.5f;
 GLfloat pitch = 3.5f;
 
 // Keyboard input buffer
@@ -141,20 +141,20 @@ int main()
 
     glBindVertexArray(cubeVAO);
 
-     // Set vertex attributes
+    // Set vertex attributes
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     // Set normal attributes
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-     // Light cube VAO (same as cube VAO)
+    // Light cube VAO (same as cube VAO)
     unsigned int lightCubeVAO;
     glGenVertexArrays(1, &lightCubeVAO);
     glBindVertexArray(lightCubeVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    
+
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
 
@@ -219,7 +219,7 @@ int main()
         lightCubeShader.setMat4("view", view);
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); 
+        model = glm::scale(model, glm::vec3(0.2f));
         lightCubeShader.setMat4("model", model);
 
         // Draw light cube
@@ -237,7 +237,7 @@ int main()
     glDeleteVertexArrays(1, &lightCubeVAO);
     glDeleteBuffers(1, &VBO);
 
-    // Terminate GLFW, clearing all previously allocated GLFW resources 
+    // Terminate GLFW, clearing all previously allocated GLFW resources
     glfwTerminate();
     return 0;
 }
@@ -255,7 +255,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
     // Handle escape key to close window
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
-     // Store keyboard state
+    // Store keyboard state
     if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
@@ -276,10 +276,10 @@ void do_movement()
     if (keys[GLFW_KEY_1])
     {
         cameraPos = glm::vec3(-1.12255f, -0.00404159f, 2.48081f);
-        cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); 
+        cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
         cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-        yaw = -64.5f; 
-        pitch = 3.5f; 
+        yaw = -64.5f;
+        pitch = 3.5f;
         lightPos = glm::vec3(0.5f, 0.0f, 2.0f);
     }
 
@@ -327,7 +327,7 @@ void do_movement()
 // Process keyboard input for moving the light source
 void moveLighting(GLFWwindow *window)
 {
-    float lightSpeed = 0.5f; 
+    float lightSpeed = 0.5f;
 
     if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
         lightPos.y += lightSpeed * deltaTime;
@@ -338,9 +338,9 @@ void moveLighting(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
         lightPos.x += lightSpeed * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
-        lightPos.z -= lightSpeed * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
         lightPos.z += lightSpeed * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        lightPos.z -= lightSpeed * deltaTime;
 }
 
 // Get user input for shininess value
