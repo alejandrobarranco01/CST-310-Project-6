@@ -30,7 +30,20 @@ This submission should include the following files:
 - [Cube.vs](Cube.vs)
 - [Project-6.cpp](Project-6.cpp)
 - [Shader.h](Shader.h)
-  
+
+## Dependencies
+
+The project relies on the following libraries and dependencies:
+
+- OpenGL (for graphics rendering)
+- GLUT (OpenGL Utility Toolkit)
+- GLEW (OpenGL Extension Wrangler Library)
+- GLFW (OpenGL Framework)
+- SOIL (Simple OpenGL Image Library)
+- GLM (OpenGL Mathematics)
+
+Ensure that these libraries are installed on your system and linked properly during compilation to run the project successfully.
+
 ## Installation
 
 To run the project, follow these steps:
@@ -49,5 +62,8 @@ g++ -g Project-6.cpp -o Project-6 -lGL -lGLU -lglut -lGLEW -lglfw -lSOIL -lglm
 ```
 
 ## Running the Project
-
-
+To run the project on Ubuntu terminal, use the following command:
+```bash
+./Project6
+```
+Ensure that you have the necessary libraries installed and linked properly to compile and run the project successfully.
