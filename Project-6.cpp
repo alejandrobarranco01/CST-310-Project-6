@@ -83,7 +83,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // Create shaders
-    Shader lightingShader("Light.vs", "Light.frag");
+    Shader cubeShader("Cube.vs", "Cube.frag");
     Shader lightCubeShader("Cube-Light.vs", "Cube-Light.frag");
 
     // Vertex data for cube
@@ -174,13 +174,13 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Use lighting shader
-        lightingShader.use();
+        cubeShader.use();
         // Set shader uniforms
-        lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("lightPos", lightPos);
-        lightingShader.setVec3("viewPos", cameraPos);
-        GLint shininessLocation = lightingShader.getUniformLocation("shininess");
+        cubeShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        cubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        cubeShader.setVec3("lightPos", lightPos);
+        cubeShader.setVec3("viewPos", cameraPos);
+        GLint shininessLocation = cubeShader.getUniformLocation("shininess");
         if (shininessLocation == -1)
         {
             std::cerr << "Failed to locate the shininess uniform in the shader program!" << std::endl;
@@ -201,12 +201,12 @@ int main()
         // View/Projection transformations
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         glm::mat4 projection = glm::perspective(45.0f, (GLfloat)SCR_WIDTH / (GLfloat)SCR_HEIGHT, 0.1f, 100.0f);
-        lightingShader.setMat4("projection", projection);
-        lightingShader.setMat4("view", view);
+        cubeShader.setMat4("projection", projection);
+        cubeShader.setMat4("view", view);
 
         // World transformation
         glm::mat4 model = glm::mat4(1.0f);
-        lightingShader.setMat4("model", model);
+        cubeShader.setMat4("model", model);
 
         // Render the cube
         glBindVertexArray(cubeVAO);
