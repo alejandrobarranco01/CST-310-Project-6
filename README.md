@@ -40,4 +40,14 @@ To run the project, follow these steps:
 git clone https://github.com/alejandrobarranco01/CST-310-Project-6
 ```  
 2. Navigate to the project directory:
+```bash
+cd CST-310-Project-6
+```
+3. Compile the project using the provided flags:
+```bash
+g++ -g Project-6.cpp -o Project-6 -lGL -lGLU -lglut -lGLEW -lglfw -lSOIL -lglm
+```
+
+## Running the Project
+
 
