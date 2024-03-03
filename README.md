@@ -30,4 +30,14 @@ This submission should include the following files:
 - [Cube.vs](Cube.vs)
 - [Project-6.cpp](Project-6.cpp)
 - [Shader.h](Shader.h)
+  
+## Installation
+
+To run the project, follow these steps:
+
+1. Clone the repository from GitHub:
+```bash
+git clone https://github.com/alejandrobarranco01/CST-310-Project-6
+```  
+2. Navigate to the project directory:
 
