@@ -28,11 +28,12 @@ Project 6 focuses on exploring specular lighting, objects, illumination, and sha
 ---
 
 
-## Code Files
-- Cube-Light.frag
-- Cube-Light.vs
-- Cube.frag
-- Cube.vs
-- Project-6.cpp
-- Shader.h
+### Code Files
+
+- [Cube-Light.frag](Cube-Light.frag)
+- [Cube-Light.vs](Cube-Light.vs)
+- [Cube.frag](Cube.frag)
+- [Cube.vs](Cube.vs)
+- [Project-6.cpp](Project-6.cpp)
+- [Shader.h](Shader.h)
 
